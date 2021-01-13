@@ -58,6 +58,13 @@ public class TranscriptionDAO {
 		return statement.executeUpdate();
 	}
 	
+	public static int delete(Connection connection, int id) throws SQLException {
+		String query = "DELETE FROM transcription WHERE id = ?";
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setInt(1, id);
+		return statement.executeUpdate();
+	}
+	
 	private static Transcription generateTranscription(ResultSet res) throws SQLException {
 		Map<String, String> textKorean = generateTextMap(res.getString("text_korean"));
 		Map<String, String> textEnglish = generateTextMap(res.getString("text_english"));

@@ -8,6 +8,7 @@ import java.util.Map;
 import transcriptions.DAO.TranscriptionDAO;
 import transcriptions.IO.ImportTranscription;
 import transcriptions.model.Transcription;
+import transcriptions.util.PrintUtil;
 
 public class TranscriptionController {
 	public static void insert(Connection connection) throws IOException, SQLException {
@@ -18,7 +19,7 @@ public class TranscriptionController {
 			Transcription transcription = new Transcription(mapData.get("titleKorean"), mapData.get("titleEnglish"),
 					textKorean, textEnglish, mapData.get("type"), mapData.get("link"), mapData.get("date"));
 			int res = TranscriptionDAO.insert(connection, transcription);
-			System.out.println(res);
+			PrintUtil.actionMessage(res);
 		} else {
 			System.out.println("The text already exists");
 		}
@@ -39,11 +40,8 @@ public class TranscriptionController {
 		System.out.println(res);
 	}
 	
-	public static void generateTranscription() throws IOException {
-		Transcription transcription = new Transcription();
-		Map<String, String> textKorean = ImportTranscription.importText("text_korean.txt");
-		Map<String, String> textEnglish = ImportTranscription.importText("text_english.txt");
-		transcription.setTextKorean(textKorean);
-		transcription.setTextEnglish(textEnglish);
+	public static void delete(Connection connection, int id) throws SQLException {
+		int res = TranscriptionDAO.delete(connection, id);
+		PrintUtil.actionMessage(res);
 	}
 }
