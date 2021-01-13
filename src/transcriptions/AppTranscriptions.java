@@ -3,10 +3,12 @@ package transcriptions;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import transcriptions.DAO.AdminMySQL;
-import transcriptions.DAO.TranscriptionDAO;
+import transcriptions.IO.ExportSearchResult;
 import transcriptions.controller.TranscriptionController;
 import transcriptions.model.Transcription;
 
@@ -40,16 +42,30 @@ public class AppTranscriptions {
 	}
 
 	private static void transcriptionSearch(Connection connection, Scanner sc) throws SQLException {
-		System.out.println("1. Merge subs");
+		System.out.println("1. Search words in Korean, 2. Search a phrase in Korean");
 		int option = sc.nextInt();
 		switch(option) {
 		case 1:
-			Transcription transcription = TranscriptionDAO.findById(connection, 1);
-			transcription.getTextKorean().forEach((key, value) -> {
-				System.out.println(key);
-				System.out.println(value);
-				System.out.println(transcription.getTextEnglish().get(key));
-			});
+			System.out.println("Word or words (separated by space):");
+			sc.nextLine();
+			String words = sc.nextLine() + " ";
+			String[] wordList = words.split(" ");
+			try {
+				String fileName = ExportSearchResult.generateFile(wordList);
+				for (int i = 0; i < wordList.length; i++) {
+					Map<Transcription, List<String>> data = TranscriptionController.findByWordInKorean(connection, wordList[i]);
+					ExportSearchResult.generateWordDetail(data, fileName, wordList[i]);
+				}
+				System.out.println("Resultado de busqueda exportado como " + fileName);
+			} catch (IOException e) {
+				System.out.println("Error when writing to a file");
+			}
+			
+			break;
+		case 2:
+			System.out.println("Word:");
+			String word = sc.next();
+			TranscriptionController.findByWordInKorean(connection, word);
 			break;
 		}
 		

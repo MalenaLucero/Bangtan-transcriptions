@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import transcriptions.model.Transcription;
@@ -63,6 +65,25 @@ public class TranscriptionDAO {
 		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setInt(1, id);
 		return statement.executeUpdate();
+	}
+	
+	public static List<Transcription> findByWord(Connection connection, String language, String word) throws SQLException{
+		String query = language == "Korean"
+				? "SELECT * FROM transcription WHERE text_korean LIKE ?"
+				: "SELECT * FROM transcription WHERE text_english LIKE ?";
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setString(1, "%" + word + "%");
+		ResultSet res = statement.executeQuery();
+		return generateTranscriptionList(res);
+	}
+	
+	private static List<Transcription> generateTranscriptionList(ResultSet res) throws SQLException{
+		List<Transcription> list = new ArrayList<Transcription>();
+		while(res.next()) {
+			Transcription transcription = generateTranscription(res);
+			list.add(transcription);
+		}
+		return list;
 	}
 	
 	private static Transcription generateTranscription(ResultSet res) throws SQLException {
