@@ -1,5 +1,5 @@
 titleKorean:
-titleEnglish:DJ Suga's Honey FM 06.13 with JIMIN #0613FM_0530
-type:subtitle
-link:https://www.vlive.tv/video/194120
-date:2020-05-30
+titleEnglish:Run BTS! 2017 - EP.31
+type:run
+link:https://www.vlive.tv/video/51638
+date:2017-12-12

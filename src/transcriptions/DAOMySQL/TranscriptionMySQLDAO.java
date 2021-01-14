@@ -1,4 +1,4 @@
-package transcriptions.DAO;
+package transcriptions.DAOMySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 import transcriptions.model.Transcription;
 
-public class TranscriptionDAO {
+public class TranscriptionMySQLDAO {
 	public static int insert(Connection connection, Transcription transcription) throws SQLException {
 		String query = "INSERT INTO transcription "
 				+ "(title_korean, title_english, text_korean, text_english, type, link, date) "
@@ -73,6 +73,17 @@ public class TranscriptionDAO {
 				: "SELECT * FROM transcription WHERE text_english LIKE ?";
 		PreparedStatement statement = connection.prepareStatement(query);
 		statement.setString(1, "%" + word + "%");
+		ResultSet res = statement.executeQuery();
+		return generateTranscriptionList(res);
+	}
+	
+	public static List<Transcription> findByWordAndType(Connection connection, String language, String word, String type) throws SQLException{
+		String query = language == "Korean"
+				? "SELECT * FROM transcription WHERE text_korean LIKE ? AND type = ?"
+				: "SELECT * FROM transcription WHERE text_english LIKE ? AND type = ?";
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setString(1, "%" + word + "%");
+		statement.setString(2, type);
 		ResultSet res = statement.executeQuery();
 		return generateTranscriptionList(res);
 	}

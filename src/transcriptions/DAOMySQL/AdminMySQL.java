@@ -1,4 +1,4 @@
-package transcriptions.DAO;
+package transcriptions.DAOMySQL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

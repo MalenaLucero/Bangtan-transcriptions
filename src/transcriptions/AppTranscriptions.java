@@ -3,20 +3,19 @@ package transcriptions;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
 import java.util.Scanner;
 
-import transcriptions.DAO.AdminMySQL;
-import transcriptions.IO.ExportSearchResult;
+import transcriptions.DAOPostgres.AdminPostgres;
 import transcriptions.controller.TranscriptionController;
+import transcriptions.menu.TranscriptionSearchMenu;
 import transcriptions.model.Transcription;
 
 public class AppTranscriptions {
 	public static void main(String[] args) {
 		try {
-			Connection connection = AdminMySQL.connect();
-			System.out.println("Sucessfully connected to database");
+			Connection connection = AdminPostgres.connect();
+			System.out.println("Sucessfully connected to Postgres database");
 			Scanner sc = new Scanner(System.in);
 			try {
 				System.out.println("1. CRUD, 2. Transcription search");
@@ -33,45 +32,26 @@ public class AppTranscriptions {
 				e.printStackTrace();
 			}
 			sc.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println("Programa finalizado");
 	}
 
-	private static void transcriptionSearch(Connection connection, Scanner sc) throws SQLException {
+	private static void transcriptionSearch(Connection connection, Scanner sc) throws SQLException, IOException {
 		System.out.println("1. Search words in Korean, 2. Search a phrase in Korean");
-		int option = sc.nextInt();
-		switch(option) {
+		int optionSearch = sc.nextInt();
+		switch(optionSearch) {
 		case 1:
-			System.out.println("Word or words (separated by space):");
-			sc.nextLine();
-			String words = sc.nextLine() + " ";
-			String[] wordList = words.split(" ");
-			try {
-				String fileName = ExportSearchResult.generateFile(wordList);
-				for (int i = 0; i < wordList.length; i++) {
-					Map<Transcription, List<String>> data = TranscriptionController.findByWordInKorean(connection, wordList[i]);
-					ExportSearchResult.generateWordDetail(data, fileName, wordList[i]);
-				}
-				System.out.println("Resultado de busqueda exportado como " + fileName);
-			} catch (IOException e) {
-				System.out.println("Error when writing to a file");
-			}
-			
+			TranscriptionSearchMenu.searchIsolatedWords(sc, connection);
 			break;
 		case 2:
-			System.out.println("Word:");
-			String word = sc.next();
-			TranscriptionController.findByWordInKorean(connection, word);
+			TranscriptionSearchMenu.searchPhrase(sc, connection);
 			break;
 		}
-		
 	}
 
-	private static void crud(Connection connection, Scanner sc) throws IOException, SQLException {
+	private static void crud(Connection connection, Scanner sc) throws IOException, SQLException, ParseException {
 		System.out.println("1. Insert, 2. Modify, 3. Delete");
 		int option = sc.nextInt();
 		switch(option) {
@@ -91,6 +71,5 @@ public class AppTranscriptions {
 			TranscriptionController.delete(connection, id);
 			break;
 		}
-		
 	}
 }
