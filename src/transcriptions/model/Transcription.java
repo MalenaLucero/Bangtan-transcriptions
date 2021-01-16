@@ -86,6 +86,6 @@ public class Transcription {
 	}
 	
 	public String toString() {
-		return String.format("%s", titleEnglish);
+		return String.format("Episode: %s - Type: %s", titleEnglish, type);
 	}
 }

@@ -78,7 +78,8 @@ public class AppTranscriptions {
 	}
 
 	private static void transcriptionCrud(Connection connection, Scanner sc) throws IOException, SQLException, ParseException {
-		System.out.println("1. Insert, 2. Modify, 3. Delete, 4. Find by ID");
+		System.out.println("1. Insert, 2. Modify, 3. Delete, 4. Find by ID,");
+		System.out.println("5. Export, 6. List all");
 		int option = sc.nextInt();
 		switch(option) {
 		case 1:
@@ -92,6 +93,12 @@ public class AppTranscriptions {
 			break;
 		case 4:
 			TranscriptionCrudMenu.findById(connection, sc);
+			break;
+		case 5:
+			TranscriptionCrudMenu.exportTranscription(connection, sc);
+			break;
+		case 6:
+			TranscriptionCrudMenu.findAll(connection);
 			break;
 		}
 	}

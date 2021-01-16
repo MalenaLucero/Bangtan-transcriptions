@@ -47,6 +47,13 @@ public class TranscriptionDAO {
 		ResultSet res = statement.executeQuery();
 		return res.next() ? generateTranscription(res) : null;
 	}
+	
+	public static List<Transcription> findAll(Connection connection) throws SQLException {
+		String query = "SELECT * from public.transcription";
+		PreparedStatement statement = connection.prepareStatement(query);
+		ResultSet res = statement.executeQuery();
+		return generateTranscriptionList(res);
+	}
 
 	public static int update(Connection connection, Transcription transcription) throws SQLException, ParseException {
 		String editString = "UPDATE public.transcription "

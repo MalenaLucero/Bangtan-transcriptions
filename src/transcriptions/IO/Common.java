@@ -1,6 +1,7 @@
 package transcriptions.IO;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,5 +21,12 @@ public class Common {
 		}
 		bufferedReader.close();
 		return map;
+	}
+	
+	public static void appendLine(BufferedWriter writer, String line) throws IOException {
+		if(line != null && line.length() > 0) {
+			writer.append(line);
+			writer.newLine();
+		}
 	}
 }

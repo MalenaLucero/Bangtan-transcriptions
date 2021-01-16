@@ -38,4 +38,19 @@ public class TranscriptionCrudMenu {
 		int id = sc.nextInt();
 		TranscriptionController.findById(connection, id);
 	}
+	
+	public static void exportTranscription(Connection connection, Scanner sc) throws SQLException, IOException {
+		System.out.println("Export transcription");
+		System.out.println("ID:");
+		int id = sc.nextInt();
+		System.out.println("Choose what you want to export:");
+		System.out.println("1. Text in Korean, 2. Text in English, 3. Both");
+		int option = sc.nextInt();
+		TranscriptionController.exportTranscription(connection, id, option);
+	}
+	
+	public static void findAll(Connection connection) throws SQLException {
+		System.out.println("List all transcriptions");
+		TranscriptionController.findAll(connection);
+	}
 }
