@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.Map;
 
 import transcriptions.DAOPostgres.TranscriptionDAO;
 import transcriptions.IO.ImportTranscription;
@@ -13,22 +12,24 @@ import transcriptions.util.PrintUtil;
 
 public class TranscriptionController {
 	public static void insert(Connection connection) throws IOException, SQLException, ParseException {
-		Map<String, String> mapData = ImportTranscription.importStringData("data.txt");
-		if(TranscriptionDAO.findByTitle(connection, mapData.get("titleEnglish")) == null) {
-			Map<String, String> textKorean = ImportTranscription.importText("text_korean.txt");
-			Map<String, String> textEnglish = ImportTranscription.importText("text_english.txt");
-			Transcription transcription = new Transcription(mapData.get("titleKorean"), mapData.get("titleEnglish"),
-					textKorean, textEnglish, mapData.get("type"), mapData.get("link"), mapData.get("date"));
+		Transcription transcription = ImportTranscription.importFromFile();
+		if(TranscriptionDAO.findByTitle(connection, transcription.getTitleEnglish()) == null) {
 			int res = TranscriptionDAO.insert(connection, transcription);
 			PrintUtil.actionMessage(res);
 		} else {
-			System.out.println("The text already exists");
+			System.out.println("The text already exists in the database");
 		}
 	}
 	
 	public static void findById(Connection connection, int id) throws SQLException {
 		Transcription transcription = TranscriptionDAO.findById(connection, id);
-		System.out.println(transcription);
+		System.out.println(transcription.getTextKorean().size());
+		System.out.println(transcription.getTextEnglish().size());
+		for (String koreanKey: transcription.getTextKorean().keySet()) {
+			if(transcription.getTextEnglish().get(koreanKey) == null) {
+				System.out.println(koreanKey);
+			}
+		}
 	}
 	
 	public static void findByTitle(Connection connection, String title) throws SQLException {
@@ -36,7 +37,7 @@ public class TranscriptionController {
 		System.out.println(transcription);
 	}
 	
-	public static void update(Connection connection, Transcription transcription) throws SQLException {
+	public static void update(Connection connection, Transcription transcription) throws SQLException, ParseException {
 		int res = TranscriptionDAO.update(connection, transcription);
 		System.out.println(res);
 	}

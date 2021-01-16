@@ -48,7 +48,7 @@ public class TranscriptionDAO {
 		return res.next() ? generateTranscription(res) : null;
 	}
 
-	public static int update(Connection connection, Transcription transcription) throws SQLException {
+	public static int update(Connection connection, Transcription transcription) throws SQLException, ParseException {
 		String editString = "UPDATE public.transcription "
 				+ "SET title_korean = ?, title_english = ?, text_korean = ?, text_english = ?, "
 				+ "type = ?, link = ?, date = ? WHERE id = ?";
@@ -59,7 +59,8 @@ public class TranscriptionDAO {
 		statement.setString(4, generateStringFromMap(transcription.getTextEnglish()));
 		statement.setString(5, transcription.getType());
 		statement.setString(6, transcription.getLink());
-		statement.setString(7, transcription.getDate());
+		Date date = new SimpleDateFormat("yyyy-MM-dd").parse(transcription.getDate());
+		statement.setDate(7, new java.sql.Date(date.getTime()));
 		statement.setInt(8, transcription.getId());
 		return statement.executeUpdate();
 	}

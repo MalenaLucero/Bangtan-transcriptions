@@ -1,0 +1,6 @@
+titleKorean:지민 “저는 사랑받고 싶어 하는 사람이더라고요”
+titleEnglish:Jimin “I’m the kind of person who likes to be loved”
+titleJapanese:JIMIN「僕は愛されたいタイプだったんです」
+type:interview
+link:https://magazine.weverse.io/article/view?lang=ko&num=56
+date:2020-11-23

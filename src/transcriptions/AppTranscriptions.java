@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Scanner;
 
 import transcriptions.DAOPostgres.AdminPostgres;
-import transcriptions.controller.TranscriptionController;
+import transcriptions.DAOPostgres.TextDAO;
+import transcriptions.controller.TextController;
+import transcriptions.menu.TextCrudMenu;
+import transcriptions.menu.TranscriptionCrudMenu;
 import transcriptions.menu.TranscriptionSearchMenu;
-import transcriptions.model.Transcription;
+import transcriptions.model.Text;
 
 public class AppTranscriptions {
 	public static void main(String[] args) {
@@ -18,15 +22,21 @@ public class AppTranscriptions {
 			System.out.println("Sucessfully connected to Postgres database");
 			Scanner sc = new Scanner(System.in);
 			try {
-				System.out.println("1. CRUD, 2. Transcription search");
+				System.out.println("1. Transcription CRUD, 2. Transcription search,"
+								+ " 3. Text CRUD, 4. Text search");
 				int option = sc.nextInt();
 				switch(option) {
 				case 1:
-					crud(connection, sc);
+					transcriptionCrud(connection, sc);
 					break;
 				case 2:
 					transcriptionSearch(connection, sc);
 					break;
+				case 3:
+					textCrud(connection, sc);
+					break;
+				case 4:
+					textSearch(connection, sc);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -36,6 +46,22 @@ public class AppTranscriptions {
 			e.printStackTrace();
 		}
 		System.out.println("Programa finalizado");
+	}
+
+	private static void textCrud(Connection connection, Scanner sc) throws IOException, SQLException, ParseException {
+		System.out.println("1. Insert, 2. Find by id, 3. Modify, 4. Delete");
+		int option = sc.nextInt();
+		switch(option) {
+		case 1:
+			TextCrudMenu.insert(connection);
+			break;
+		case 2:
+			TextController.findById(connection, sc);
+			break;
+		case 3:
+			TextCrudMenu.update(connection, sc);
+			break;
+		}
 	}
 
 	private static void transcriptionSearch(Connection connection, Scanner sc) throws SQLException, IOException {
@@ -51,25 +77,38 @@ public class AppTranscriptions {
 		}
 	}
 
-	private static void crud(Connection connection, Scanner sc) throws IOException, SQLException, ParseException {
-		System.out.println("1. Insert, 2. Modify, 3. Delete");
+	private static void transcriptionCrud(Connection connection, Scanner sc) throws IOException, SQLException, ParseException {
+		System.out.println("1. Insert, 2. Modify, 3. Delete, 4. Find by ID");
 		int option = sc.nextInt();
 		switch(option) {
 		case 1:
-			System.out.println("Insert");
-			TranscriptionController.insert(connection);
+			TranscriptionCrudMenu.insert(connection);
 			break;
 		case 2:
-			System.out.println("Modify");
-			Transcription transcription = new Transcription();
-			TranscriptionController.update(connection, transcription);
+			TranscriptionCrudMenu.update(connection, sc);
 			break;
 		case 3:
-			System.out.println("Delete");
-			System.out.println("ID:");
-			int id = sc.nextInt();
-			TranscriptionController.delete(connection, id);
+			TranscriptionCrudMenu.delete(connection, sc);
 			break;
+		case 4:
+			TranscriptionCrudMenu.findById(connection, sc);
+			break;
+		}
+	}
+	
+	private static void textSearch(Connection connection, Scanner sc) throws SQLException {
+		System.out.println("word to search");
+		String word = sc.next();
+		List<Text> list = TextDAO.findByWord(connection, word);
+		for (Text text: list) {
+			System.out.println(text.getTitleEnglish());
+			for (int i = 0; i < text.getTextKorean().size(); i++) {
+				if(text.getTextKorean().get(i).contains(word)) {
+					System.out.println(text.getTextKorean().get(i));
+					System.out.println(text.getTextJapanese().get(i));
+					System.out.println(text.getTextEnglish().get(i));
+				}
+			}
 		}
 	}
 }
