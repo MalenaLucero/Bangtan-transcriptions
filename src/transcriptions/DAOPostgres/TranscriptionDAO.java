@@ -113,19 +113,17 @@ public class TranscriptionDAO {
 	private static Map<String, String> generateTextMap(String text) {
 		String[] textList = text.split("\\r\\n");
 		Map<String, String> textMap = new LinkedHashMap<String, String>();
+		boolean isKey = true;
+		String key = null;
+		String value = null;
 		for (int i = 0; i < textList.length; i++) {
-			String key = null;
-			String value = "";
-			if(key == null && textList[i].contains("-->")) {
+			if(isKey) {
 				key = textList[i];
-				int index = i + 1;
-				while(index < textList.length && !textList[index].contains("-->")) {
-					value = value.length() > 0 ? value + " " + textList[index] : value + textList[index];
-					index++;
-				}
+				isKey = false;
+			} else {
+				value = textList[i];
 				textMap.put(key, value);
-				key = null;
-				value = "";
+				isKey = true;
 			}
 		}
 		return textMap;

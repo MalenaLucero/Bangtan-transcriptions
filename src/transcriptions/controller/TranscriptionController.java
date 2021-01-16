@@ -23,13 +23,7 @@ public class TranscriptionController {
 	
 	public static void findById(Connection connection, int id) throws SQLException {
 		Transcription transcription = TranscriptionDAO.findById(connection, id);
-		System.out.println(transcription.getTextKorean().size());
-		System.out.println(transcription.getTextEnglish().size());
-		for (String koreanKey: transcription.getTextKorean().keySet()) {
-			if(transcription.getTextEnglish().get(koreanKey) == null) {
-				System.out.println(koreanKey);
-			}
-		}
+		System.out.println(transcription);
 	}
 	
 	public static void findByTitle(Connection connection, String title) throws SQLException {
