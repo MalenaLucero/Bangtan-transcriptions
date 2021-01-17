@@ -10,6 +10,7 @@ import java.util.Scanner;
 import transcriptions.DAOPostgres.AdminPostgres;
 import transcriptions.DAOPostgres.TextDAO;
 import transcriptions.controller.TextController;
+import transcriptions.menu.SectionCrudMenu;
 import transcriptions.menu.TextCrudMenu;
 import transcriptions.menu.TranscriptionCrudMenu;
 import transcriptions.menu.TranscriptionSearchMenu;
@@ -23,7 +24,7 @@ public class AppTranscriptions {
 			Scanner sc = new Scanner(System.in);
 			try {
 				System.out.println("1. Transcription CRUD, 2. Transcription search,"
-								+ " 3. Text CRUD, 4. Text search");
+								+ " 3. Text CRUD, 4. Text search, 5. Section CRUD");
 				int option = sc.nextInt();
 				switch(option) {
 				case 1:
@@ -37,6 +38,10 @@ public class AppTranscriptions {
 					break;
 				case 4:
 					textSearch(connection, sc);
+					break;
+				case 5:
+					sectionCrud(connection, sc);
+					break;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -118,4 +123,22 @@ public class AppTranscriptions {
 			}
 		}
 	}
+	
+	private static void sectionCrud(Connection connection, Scanner sc) throws IOException, SQLException, ParseException {
+		System.out.println("1. Insert, 2. Find by ID, 3. Export");
+		int option = sc.nextInt();
+		switch(option) {
+		case 1:
+			SectionCrudMenu.insert(connection);
+			break;
+		case 2:
+			SectionCrudMenu.findById(connection, sc);
+			break;
+		case 3:
+			SectionCrudMenu.export(connection, sc);
+			break;
+		}
+		
+	}
+
 }

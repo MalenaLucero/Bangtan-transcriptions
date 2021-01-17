@@ -1,0 +1,4 @@
+start:00:27:28
+finish:00:59:43
+title:ending
+id_transcription:2
