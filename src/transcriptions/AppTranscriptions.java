@@ -138,7 +138,5 @@ public class AppTranscriptions {
 			SectionCrudMenu.export(connection, sc);
 			break;
 		}
-		
 	}
-
 }

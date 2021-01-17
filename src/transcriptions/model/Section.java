@@ -1,15 +1,11 @@
 package transcriptions.model;
 
-import java.util.Map;
-
 public class Section {
 	private int id;
 	private String start;
 	private String finish;
 	private String title;
 	private int idTranscription;
-	private Map<String, String> textKorean;
-	private Map<String, String> textEnglish;
 	
 	public Section(String start, String finish, String title, int idTranscription) {
 		this.start = start;
@@ -54,18 +50,6 @@ public class Section {
 	}
 	public void setIdTranscription(int idTranscription) {
 		this.idTranscription = idTranscription;
-	}
-	public Map<String, String> getTextKorean() {
-		return textKorean;
-	}
-	public void setTextKorean(Map<String, String> textKorean) {
-		this.textKorean = textKorean;
-	}
-	public Map<String, String> getTextEnglish() {
-		return textEnglish;
-	}
-	public void setTextEnglish(Map<String, String> textEnglish) {
-		this.textEnglish = textEnglish;
 	}
 
 	public String toString() {

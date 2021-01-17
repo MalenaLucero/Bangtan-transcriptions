@@ -10,14 +10,19 @@ import transcriptions.model.Transcription;
 
 public class ExportSearchResult {
 	public static String generateFile(String[] words) throws IOException{
-		String fileName = "";
-		for (int i = 0; i < words.length; i++) {
-			fileName = (i != words.length - 1) ? fileName + words[i] + "_" : fileName + words[i] + ".txt";
-		}
+		String fileName = generateFileName(words);
 		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
 		appendLine(writer, "RESULTADO DE LA BUSQUEDA");
 	    writer.close();
 	    return fileName;
+	}
+	
+	private static String generateFileName(String[] words) {
+		String fileName = "";
+		for (int i = 0; i < words.length; i++) {
+			fileName = (i != words.length - 1) ? fileName + words[i] + "_" : fileName + words[i] + ".txt";
+		}
+		return fileName;
 	}
 	
 	public static void generateWordDetail(Map<Transcription, List<String>> data, String fileName, String word) throws IOException{
@@ -29,6 +34,7 @@ public class ExportSearchResult {
 		for(Transcription transcription: data.keySet()) {
 			writer.newLine();
 			appendLine(writer, "EPISODE: " + transcription.toString());
+			appendLine(writer, transcription.getLink());
 			for(String key: data.get(transcription)) {
 				writer.newLine();
 				appendLine(writer, key);

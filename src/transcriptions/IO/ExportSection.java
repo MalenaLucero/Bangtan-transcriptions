@@ -3,6 +3,7 @@ package transcriptions.IO;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import transcriptions.model.Section;
@@ -16,7 +17,9 @@ public class ExportSection {
 		Common.appendLine(writer, "Section of " + transcription.getTitleEnglish());
 		Common.appendLine(writer, transcription.getLink());
 		writer.newLine();
-		printBothTexts(writer, section.getTextKorean(), section.getTextEnglish());
+		Map<String, String> sectionTextKorean = generateSectionText(section.getStart(), section.getFinish(), transcription.getTextKorean());
+		Map<String, String> sectionTextEnglish = generateSectionText(section.getStart(), section.getFinish(), transcription.getTextEnglish());
+		printBothTexts(writer, sectionTextKorean, sectionTextEnglish);
 	    writer.close();
 	    System.out.println("File exported as " + fileName);
 	}
@@ -27,5 +30,21 @@ public class ExportSection {
 			Common.appendLine(writer, textKorean.get(key));
 			Common.appendLine(writer, textEnglish.get(key));
 		}
+	}
+	
+	private static Map<String, String> generateSectionText(String start, String finish, Map<String, String> fullText) {
+		Map<String, String> sectionText = new LinkedHashMap<String, String>();
+		boolean isInSection = false;
+		for(String key: fullText.keySet()) {
+			if(key.equals(start)) {
+				isInSection = true;
+			} else if(key.equals(finish)) {
+				isInSection = false;
+			}
+			if(isInSection) {
+				sectionText.put(key, fullText.get(key));
+			}
+		}
+		return sectionText;
 	}
 }
