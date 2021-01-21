@@ -33,6 +33,13 @@ public class TextCrudMenu {
 		}
 	}
 	
+	public static void export(Connection connection, Scanner sc) throws SQLException, IOException {
+		System.out.println("Export");
+		System.out.println("ID:");
+		int id = sc.nextInt();
+		TextController.export(connection, id);
+	}
+	
 	public static void delete(Connection connection, Scanner sc) throws SQLException {
 		System.out.println("Delete");
 		System.out.println("ID:");

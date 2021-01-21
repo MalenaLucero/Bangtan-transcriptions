@@ -54,7 +54,7 @@ public class AppTranscriptions {
 	}
 
 	private static void textCrud(Connection connection, Scanner sc) throws IOException, SQLException, ParseException {
-		System.out.println("1. Insert, 2. Find by id, 3. Modify, 4. Delete");
+		System.out.println("1. Insert, 2. Find by id, 3. Modify, 4. Export");
 		int option = sc.nextInt();
 		switch(option) {
 		case 1:
@@ -65,6 +65,9 @@ public class AppTranscriptions {
 			break;
 		case 3:
 			TextCrudMenu.update(connection, sc);
+			break;
+		case 4:
+			TextCrudMenu.export(connection, sc);
 			break;
 		}
 	}

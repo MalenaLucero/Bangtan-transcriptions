@@ -1,6 +1,6 @@
-titleKorean:지민 “저는 사랑받고 싶어 하는 사람이더라고요”
-titleEnglish:Jimin “I’m the kind of person who likes to be loved”
-titleJapanese:JIMIN「僕は愛されたいタイプだったんです」
+titleKorean:RM “지금 나는 어디에 와 있는 건지 많이 생각하게 돼요”
+titleEnglish:RM “I spend a lot of time thinking about where I am now”
+titleJapanese:RM「今僕はどこにいるのか、よく考えます」
 type:interview
-link:https://magazine.weverse.io/article/view?lang=ko&num=56
-date:2020-11-23
+link:https://magazine.weverse.io/article/view?lang=ko&num=62
+date:2020-11-28

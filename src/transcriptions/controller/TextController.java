@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.util.Scanner;
 
 import transcriptions.DAOPostgres.TextDAO;
+import transcriptions.IO.ExportText;
 import transcriptions.IO.ImportText;
 import transcriptions.model.Text;
 import transcriptions.util.PrintUtil;
@@ -28,5 +29,14 @@ public class TextController {
 	public static void update(Connection connection, Text text) throws SQLException, IOException, ParseException {
 		int res = TextDAO.update(connection, text);
 		System.out.println(res);
+	}
+	
+	public static void export(Connection connection, int id) throws SQLException, IOException {
+		Text text = TextDAO.findById(connection, id);
+		if(text != null) {
+			ExportText.generateFile(text);
+		} else {
+			System.out.println("Text not found");
+		}
 	}
 }
